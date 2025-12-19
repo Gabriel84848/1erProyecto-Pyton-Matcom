@@ -1,9 +1,20 @@
 {
   "habitaciones": [
     {"id": "H101", "tipo": "simple", "vista_mar": false, "piso": 1},
-  
+    {"id": "H102", "tipo": "simple", "vista_mar": false, "piso": 1},
+    {"id": "H103", "tipo": "simple", "vista_mar": false, "piso": 1},
+    {"id": "H104", "tipo": "doble", "vista_mar": false, "piso": 1},
+    {"id": "H201", "tipo": "simple", "vista_mar": true, "piso": 2},
+    {"id": "H202", "tipo": "simple", "vista_mar": false, "piso": 2},
+    {"id": "H203", "tipo": "doble", "vista_mar": true, "piso": 2},
+    {"id": "H204", "tipo": "suite", "vista_mar": true, "piso": 2}
+    ],
+    
+    "servicios": [
+    {"tipo": "masaje", "capacidad_simultanea": 2, "limite_por_reserva": 2},
+    {"tipo": "desayuno", "capacidad_simultanea": 4}
+    ],
 
-
-    ]
+    "reservas": []
 
 }
