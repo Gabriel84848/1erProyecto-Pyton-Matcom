@@ -14,3 +14,14 @@ class Habitacion:
             return f"{self.id} ({self.tipo}) - Piso {self.piso} - Vista al mar"
         else:
             return f"{self.id} ({self.tipo}) - Piso {self.piso} - Sin vista al mar"
+        
+class Servicio:
+
+    def __init__ (self, nombre, capacidad_total):
+
+        self.nombre = nombre
+        self.capacidad_total = capacidad_total
+        self.ocupado_actual = 0
+    
+    def __str__(self):
+        return f"{}"

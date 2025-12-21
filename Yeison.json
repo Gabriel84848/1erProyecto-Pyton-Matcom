@@ -10,9 +10,9 @@
     {"id": "H204", "tipo": "suite", "vista_mar": true, "piso": 2}
     ],
     
-    "servicios": [
-    {"tipo": "masaje", "capacidad_simultanea": 2, "limite_por_reserva": 2},
-    {"tipo": "desayuno", "capacidad_simultanea": 4}
+  "servicios": [
+    {"nombre": "desayuno", "capacidad_total": 4},
+    {"nombre": "masaje", "capacidad_total": 2}
     ],
 
     "reservas": []
