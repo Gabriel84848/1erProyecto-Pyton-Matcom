@@ -27,8 +27,21 @@ def cargar_Habitaciones():
             serv["capacidad_total"]
         )
         lista_servicios.append(nuevo_serv)
+    
+    lista_reservas = []
+    if "reservas" in datos:
+        for res in datos["reservas"]:
+            nueva_reserva = Reserva(
+                res["cliente"],
+                res["habitaciones"],
+                res["servicios"],
+                res["check_in"],  
+                res["check_out"]
+            )
+            lista_reservas.append(nueva_reserva)
 
-    return lista_habitaciones, lista_servicios
+    return lista_habitaciones, lista_servicios, lista_reservas
+        
 
 def guardar_reservas(lista_reservas):
     
