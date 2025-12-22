@@ -24,4 +24,38 @@ class Servicio:
         self.ocupado_actual = 0
     
     def __str__(self):
-        return f"{}"
+        return f"{self.nombre}: {self.ocupado_actual} de {self.capacidad_total} ocupados"
+    
+    def disponibilidad(self, cantidad_necesaria=1):
+        return (self.ocupado_actual + cantidad_necesaria) <= self.capacidad_total 
+    
+    def ocupar(self, cantidad=1):
+        
+        if self.disponibilidad(cantidad):
+            self.ocupado_actual += cantidad
+            return True
+        return False
+    
+    def liberar(self, cantidad = 1):
+
+        if self.ocupado_actual >= cantidad:
+            self.ocupado_actual -= cantidad
+        else:
+            self.ocupado_actual = 0
+
+class Reserva:
+
+    def __init__(self, cliente, habitaciones_ids, servicios_nombres, check_in, check_out):
+        self.cliente = cliente
+        self.habitaciones_ids = habitaciones_ids 
+        self.servicios_nombres = servicios_nombres 
+        self.check_in = check_in  
+        self.check_out = check_out
+    
+    def to_dict(self):
+        return {
+            "cliente": self.cliente,
+            "habitaciones": self.habitaciones_ids,
+            "servicios": self.servicios_nombres,
+            "check_in": str(self.check_in),  # Convierte a string
+            "check_out": str(self.check_out)}
