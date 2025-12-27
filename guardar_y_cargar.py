@@ -1,5 +1,5 @@
 import json
-from Clases import Habitacion, Servicio
+from Clases import Habitacion, Servicio, Reserva
 from pathlib import Path
 
 
