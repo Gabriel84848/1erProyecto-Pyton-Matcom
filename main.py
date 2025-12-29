@@ -35,6 +35,21 @@ def ver_habitaciones(habitaciones):
         if hab.piso == 2:
             count +=1
             print(f"{count}: {hab}")
+
+def ver_servicios(servicios):
+    print("Servicios del hotel")
+
+    print("Disponibilidad:")
+    print(f"\n{"SERVICIO":<15} {"TOTAL":<10} {"DISPONIBLE":<12} {"OCUPADOS":<10}")
+
+    for servicio in servicios:
+        disponibles = servicio.capacidad_total - servicio.ocupado_actual
+
+        print(f"{servicio.nombre.capitalize():<15} "
+              f"{servicio.capacidad_total:<10} "
+              f"{disponibles:<12} "
+              f"{servicio.ocupado_actual:<10}")
+
     
 def main():
 
@@ -48,6 +63,11 @@ def main():
         if opcion == "1":
             clear()
             ver_habitaciones(habitaciones)
+            input("\nPresiona Enter para volver al menu")
+
+        elif opcion == "2":
+            clear()
+            ver_servicios(servicios)
             input("\nPresiona Enter para volver al menu")
         
         elif opcion == "7":
