@@ -1,3 +1,4 @@
+from datetime import datetime
 
 class Habitacion:
 
@@ -49,9 +50,17 @@ class Reserva:
         self.cliente = cliente
         self.habitaciones_ids = habitaciones_ids 
         self.servicios_nombres = servicios_nombres 
-        self.check_in = check_in  
-        self.check_out = check_out
-    
+
+        if isinstance(check_in, str):
+            self.check_in = datetime.fromisoformat(check_in)
+        else:
+            self.check_in = check_in
+            
+        if isinstance(check_out, str):
+            self.check_out = datetime.fromisoformat(check_out)
+        else:
+            self.check_out = check_out        
+
     def to_dict(self):
         return {
             "cliente": self.cliente,

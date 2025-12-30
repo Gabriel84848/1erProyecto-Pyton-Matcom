@@ -1,4 +1,4 @@
-from guardar_y_cargar import cargar_Habitaciones, guardar_reservas
+from guardar_y_cargar import cargar_datos, guardar_datos
 import os
 
 def clear():
@@ -49,12 +49,14 @@ def ver_servicios(servicios):
               f"{servicio.capacidad_total:<10} "
               f"{disponibles:<12} "
               f"{servicio.ocupado_actual:<10}")
+        
+def crear_reserva(habitaciones, servicios, reservas):
+    print("Creando nueva reserva")
 
-    
 def main():
 
     print("BLUE GATE HOTEL - Reservas")
-    habitaciones, servicios, reservas = cargar_Habitaciones()
+    habitaciones, servicios, reservas = cargar_datos()
 
     while True:
         clear()
