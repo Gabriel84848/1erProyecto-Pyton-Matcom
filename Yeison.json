@@ -11,8 +11,8 @@
     ],
     
   "servicios": [
-    {"nombre": "desayuno", "capacidad_total": 4},
-    {"nombre": "masaje", "capacidad_total": 2}
+    {"nombre": "desayuno", "capacidad_total": 4, "ocupado_actual": 0},
+    {"nombre": "masaje", "capacidad_total": 2, "ocupado_actual": 0}
     ],
 
     "reservas": []

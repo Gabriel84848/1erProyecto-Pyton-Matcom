@@ -25,7 +25,8 @@ def cargar_datos():
     for serv in datos['servicios']:
         nuevo_serv = Servicio(
             serv["nombre"],
-            serv["capacidad_total"]
+            serv["capacidad_total"],
+            serv["ocupado_actual"]
         )
         lista_servicios.append(nuevo_serv)
     
@@ -42,7 +43,7 @@ def cargar_datos():
             )
             lista_reservas.append(nueva_reserva)
 
-    return lista_habitaciones, lista_servicios, lista_reservas
+    return lista_habitaciones, lista_servicios, lista_reservas  #listas de objetos preparadas par modificar
         
 
 def guardar_datos(habitaciones, servicios, reservas):
@@ -72,7 +73,8 @@ def guardar_datos(habitaciones, servicios, reservas):
         
         servicio_dict = {
             "nombre": servicio.nombre,
-            "capacidad_total": servicio.capacidad_total
+            "capacidad_total": servicio.capacidad_total,
+            "ocupado_actual": servicio.ocupado_actual
         }
         
         lista_servicios_dict.append(servicio_dict)

@@ -18,11 +18,11 @@ class Habitacion:
         
 class Servicio:
 
-    def __init__ (self, nombre, capacidad_total):
+    def __init__ (self, nombre, capacidad_total, ocupado_actual = 0):
 
         self.nombre = nombre
         self.capacidad_total = capacidad_total
-        self.ocupado_actual = 0
+        self.ocupado_actual = ocupado_actual
     
     def __str__(self):
         return f"{self.nombre}: {self.ocupado_actual} de {self.capacidad_total} ocupados"
@@ -51,8 +51,8 @@ class Reserva:
         self.habitaciones_ids = habitaciones_ids 
         self.servicios_nombres = servicios_nombres 
 
-        if isinstance(check_in, str):
-            self.check_in = datetime.fromisoformat(check_in)
+        if isinstance(check_in, str):    #convierte a dtaetime
+            self.check_in = datetime.fromisoformat(check_in) 
         else:
             self.check_in = check_in
             
