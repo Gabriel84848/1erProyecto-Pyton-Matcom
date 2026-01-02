@@ -1,4 +1,5 @@
 from guardar_y_cargar import cargar_datos, guardar_datos
+from datetime import datetime, date, timedelta
 import os
 
 def clear():
@@ -15,6 +16,7 @@ def Menu():
     print("5. Cancelar reserva existente")
     print("6. Guardar cambios")
     print("7. Salir")
+    print("8. Test")
 
     return input("selecciona una opcion (1 - 7): ")
 
@@ -53,6 +55,94 @@ def ver_servicios(servicios):
 def crear_reserva(habitaciones, servicios, reservas):
     print("Creando nueva reserva")
 
+def obtener_fechas():
+    print("Introduzca las fechas de la reserva")
+
+    while True:
+        try:
+            print("Check-in")
+            fecha_in_str = input("   Fecha (DD-MM-AAAA): ").strip()
+            
+            #2 guiones para que no se parte el split
+            if fecha_in_str.count('-') != 2:
+                print("Formato incorrecto. Usa DD-MM-AAAA")
+                continue
+            
+            dia_str, mes_str, ano_str = fecha_in_str.split('-')
+            dia = int(dia_str)
+            mes = int(mes_str)
+            ano = int(ano_str)
+            
+            check_in = date(ano, mes, dia)
+        
+            hoy = date.today()
+
+            if check_in < hoy:
+                print(f"El check-in no puede ser en el pasado")
+                print(f"Hoy es: {hoy.strftime('%d-%m-%Y')}")
+                continue
+
+            from datetime import timedelta
+            maxima_fecha = hoy.replace(year=hoy.year + 2)
+            
+            if check_in > maxima_fecha:
+                print(f"De aqui a 2 anos pueden pasar muchas cosas")
+                print(f"Fecha máxima permitida: {maxima_fecha.strftime('%d-%m-%Y')}")
+                continue
+
+            print(f"Check-in valido: {check_in.strftime('%d-%m-%Y')}")
+            break
+            
+        except ValueError:
+            print("Fecha invalida. Asegurate de usar numeros correctos")
+        except Exception as e:
+            print(f"Error: {e}")
+    
+    while True:
+        try:
+            print("CHECK-OUT")
+            fecha_out_str = input("   Fecha (DD-MM-AAAA): ").strip()
+            
+            if fecha_out_str.count('-') != 2:
+                print("Formato incorrecto. Usa DD-MM-AAAA")
+                continue
+            
+            dia_str, mes_str, ano_str = fecha_out_str.split('-')
+            dia = int(dia_str)
+            mes = int(mes_str)
+            ano = int(ano_str)
+            
+            
+            check_out = date(ano, mes, dia)
+            
+            if check_out <= check_in:
+                print(f"El check-out debe ser despues del check-in")
+                print(f"Check-in: {check_in.strftime('%d-%m-%Y')}")
+                continue
+            
+            if (check_out - check_in).days < 1:
+                print("La estancia minima es de 1 dia completo")
+                continue
+            
+            print(f"Check-out valido: {check_out.strftime('%d-%m-%Y')}")
+            break
+            
+        except ValueError:
+            print("Fecha invalida. Asegurate de usar numeros correctos")
+        except Exception as e:
+            print(f"Error: {e}")
+    
+    noches = (check_out - check_in).days
+    print("FECHAS CONFIRMADAS:")
+    print(f"Check-in:  {check_in.strftime('%d-%m-%Y')}")
+    print(f"Check-out: {check_out.strftime('%d-%m-%Y')}")
+    print(f"Noches:  {noches}")
+    
+    return check_in, check_out
+
+
+
+
 def main():
 
     print("BLUE GATE HOTEL - Reservas")
@@ -77,6 +167,13 @@ def main():
             print("Saliste")
             break
         
+        elif opcion =="8":
+            clear()
+            print("Probando fechas")
+            check_in, check_out = obtener_fechas()
+            print(f"   Check-in: {check_in}")
+            print(f"   Check-out: {check_out}")
+            input("Presiona Enter para volver al menú")
         else:
             print("NO")
             input("\nPresiona Enter para volver al menu")
