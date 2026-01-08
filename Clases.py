@@ -66,5 +66,5 @@ class Reserva:
             "cliente": self.cliente,
             "habitaciones": self.habitaciones_ids,
             "servicios": self.servicios_nombres,
-            "check_in": str(self.check_in),  # Convierte a string
+            "check_in": str(self.check_in),
             "check_out": str(self.check_out)}
