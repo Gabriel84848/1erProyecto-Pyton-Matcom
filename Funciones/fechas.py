@@ -52,7 +52,7 @@ def obtener_fechas():
             print("CHECK-OUT")
             fecha_out_str = input("   Fecha (DD-MM-AAAA): ").strip()
 
-            if fecha_in_str.lower() == 'cancelar':
+            if fecha_out_str.lower() == 'cancelar':
                 print("Cancelado por usuario")
                 return None, None
             

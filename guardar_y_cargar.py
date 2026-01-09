@@ -1,8 +1,6 @@
 import json
 from Clases import Habitacion, Servicio, Reserva
 from pathlib import Path
-from datetime import datetime
-
 
 def cargar_datos():
     
@@ -53,9 +51,8 @@ def guardar_datos(habitaciones, servicios, reservas):
     datos = {}
 
     lista_habitaciones_dict = []
-
     for habitacion in habitaciones:
-    
+
         habitacion_dict = {
             "id": habitacion.id,
             "tipo": habitacion.tipo,
@@ -66,9 +63,7 @@ def guardar_datos(habitaciones, servicios, reservas):
     
     datos["habitaciones"] = lista_habitaciones_dict
     
-    print("Guardando servicios...")
     lista_servicios_dict = []  
-    
     for servicio in servicios:
         
         servicio_dict = {
@@ -81,7 +76,6 @@ def guardar_datos(habitaciones, servicios, reservas):
     
     datos["servicios"] = lista_servicios_dict
     
-    print("Guardando reservas...")
     lista_reservas_dict = []
     
     for reserva in reservas:
@@ -92,5 +86,4 @@ def guardar_datos(habitaciones, servicios, reservas):
     datos["reservas"] = lista_reservas_dict
 
     with ruta.open("w") as archivo:
-        json.dump(datos, archivo, indent=2) # indent para que quede bonito (saltos de linea etc)\
-        print("Todo perfe")
+        json.dump(datos, archivo, indent=2) # indent para que quede bonito (saltos de linea etc)

@@ -329,7 +329,11 @@ def crear_reserva(habitaciones, servicios, reservas):
         print(f"  • Cliente: {cliente}")
         print(f"  • Fechas: {check_in.strftime('%d-%m-%Y')} a {check_out.strftime('%d-%m-%Y')}")
         print(f"  • Habitaciones: {', '.join(habitaciones_seleccionadas)}")
-        print(f"  • Servicios: {', '.join(servicios_seleccionados) if servicios_seleccionados else 'Ninguno'}")
+        if servicios_seleccionados:
+            servicios_texto = ', '.join(servicios_seleccionados)
+            print(f"Servicios: {servicios_texto}")
+        else:
+            print("Servicios: Ninguno")
     else:
         print("\nReserva cancelada por el usuario")
     
