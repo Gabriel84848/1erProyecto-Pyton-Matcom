@@ -13,20 +13,19 @@ def Menu():
 
     print("\nBLUE GATE HOTEL - Reservas")
     
-    print("1. habitaciones disponibles")
+    print("1. Catalogo de Habitaciones")
     print("2. ver Servicios del hotel ")
     print("3. ver Reservas existentes")
     print("4. Crear nueva reserva ")
     print("5. Cancelar reserva existente")
     print("6. Guardar cambios")
     print("7. Salir")
-    print("8. Test")
 
     return input("selecciona una opcion (1 - 7): ")
 
 def ver_habitaciones(habitaciones):
 
-    print("Habitaciones disponibles")
+    print("Catalogo de Habitaciones")
 
     print("PISO 1:")
     count=0
@@ -45,17 +44,87 @@ def ver_habitaciones(habitaciones):
 def ver_servicios(servicios):
     print("Servicios del hotel")
 
-    print("Disponibilidad:")
-    print(f"\n{"SERVICIO":<15} {"TOTAL":<10} {"DISPONIBLE":<12} {"OCUPADOS":<10}")
-
+    print(f"\n{"SERVICIO":<15} {"CAPACIDAD":<10}")
     for servicio in servicios:
-        disponibles = servicio.capacidad_total - servicio.ocupado_actual
-
         print(f"{servicio.nombre.capitalize():<15} "
-              f"{servicio.capacidad_total:<10} "
-              f"{disponibles:<12} "
-              f"{servicio.ocupado_actual:<10}")
+              f"{servicio.capacidad_total:<10}")
 
+def ver_reservas(reservas):
+    print("RESERVAS EXISTENTES")
+    
+    if len(reservas) == 0:
+        print("No hay reservas registradas")
+        return
+    
+    for i in range(len(reservas)):
+        reserva = reservas[i]
+        print(f"[{i+1}] Cliente: {reserva.cliente}")
+        print(f"Fechas: {reserva.check_in.strftime('%d-%m-%Y')} al {reserva.check_out.strftime('%d-%m-%Y')}")
+
+        habitaciones_texto = ", ".join(reserva.habitaciones_ids)
+        print(f"Habitaciones: {habitaciones_texto}") 
+
+        if reserva.servicios_nombres:
+            servicios_texto = ", ".join(reserva.servicios_nombres)
+            print(f"Servicios: {servicios_texto}")
+        else:
+            print("Servicios: Ninguno")
+
+def cancelar_reserva(reservas, servicios):
+    print("CANCELAR RESERVA")
+    
+    if not reservas:
+        print("No hay reservas para cancelar.")
+        return
+    
+    print("Reservas actuales:")
+    for i in range(len(reservas)):
+        reserva = reservas[i]
+        habitaciones_texto = ", ".join(reserva.habitaciones_ids)
+        print(f"[{i+1}] {reserva.cliente} - {habitaciones_texto} ({reserva.check_in.strftime('%d-%m-%Y')})")
+    
+    print()
+    
+    try:
+        seleccion = input("Ingresa el número de la reserva a cancelar (o '0' para volver): ").strip()
+            
+        if seleccion == "0":
+            print("Operación cancelada.")
+            return
+            
+        numero = int(seleccion)
+        if numero < 1 or numero > len(reservas):
+            print(f"Por favor, ingresa un número entre 1 y {len(reservas)}.")
+            return
+            
+    except ValueError:
+        print("Por favor, ingresa un número válido.")
+        return
+    #la fijamos
+    reserva_a_cancelar = reservas[numero - 1]
+    
+    print()
+    print("RESERVA SELECCIONADA:")
+    print(f"Cliente: {reserva_a_cancelar.cliente}")
+    print(f"Habitaciones: {', '.join(reserva_a_cancelar.habitaciones_ids)}")
+    print(f"Fechas: {reserva_a_cancelar.check_in.strftime('%d-%m-%Y')} al {reserva_a_cancelar.check_out.strftime('%d-%m-%Y')}")
+    
+    if reserva_a_cancelar.servicios_nombres:
+        print(f"Servicios: {', '.join(reserva_a_cancelar.servicios_nombres)}")
+    else:
+        print(f"Servicios: Ninguno")
+    
+    print()
+    confirmar = input("¿Estás seguro de cancelar esta reserva? (si/no): ").strip().lower()
+    
+    if confirmar == "si":
+
+        reservas.pop(numero - 1)
+        print()
+        print("Reserva cancelada exitosamente!")
+        print("Las habitaciones y servicios han sido liberados.")
+    else:
+        print("Cancelación cancelada por el usuario.")
 
 def main():
 
@@ -71,14 +140,24 @@ def main():
             ver_habitaciones(habitaciones)
             input("\nPresiona Enter para volver al menu")
 
+        elif opcion == "3":
+            clear()
+            ver_reservas(reservas)
+            input("\nPresiona Enter para volver al menu")
+
         elif opcion == "2":
             clear()
             ver_servicios(servicios)
             input("\nPresiona Enter para volver al menu")
-        
+
         elif opcion == "4":
             clear()
             crear_reserva(habitaciones, servicios, reservas)
+        
+        elif opcion == "5":
+            clear()
+            cancelar_reserva(reservas, servicios)
+            input("\nPresiona Enter para volver al menu")
         
         elif opcion == "6":
             clear()
@@ -91,13 +170,6 @@ def main():
             print("Saliste")
             break
         
-        elif opcion =="8":
-            clear()
-            print("Probando fechas")
-            check_in, check_out = obtener_fechas()
-            print(f"   Check-in: {check_in}")
-            print(f"   Check-out: {check_out}")
-            input("Presiona Enter para volver al menú")
         else:
             print("NO")
             input("\nPresiona Enter para volver al menu")
@@ -111,7 +183,6 @@ def crear_reserva(habitaciones, servicios, reservas):
         input("Presiona Enter para volver al menú...")
         return
     
-    print("Fechas de la reserva")
     check_in, check_out = obtener_fechas()
 
     if check_in is None or check_out is None:
@@ -130,9 +201,10 @@ def crear_reserva(habitaciones, servicios, reservas):
     suite_h204 = None
     for hab in habitaciones_disponibles:
         if hab.id == "H204":
-            if verificar_disponibilidad_servicio("desayuno", 1, servicios):
+            disponible, _ = verificar_disponibilidad_servicio("desayuno", 1, servicios, reservas, check_in, check_out)
+            if disponible:
                 suite_h204 = hab
-            break
+                break
     
     print("HABITACIONES DISPONIBLES:")
 
@@ -171,12 +243,18 @@ def crear_reserva(habitaciones, servicios, reservas):
             continue
         print(f"{mensaje}") #retorna
 
+        if "H204" in habitaciones_ids_limpios and suite_h204 is None:
+            print("No se puede reservar la suite:")
+            print("No hay desayunos disponibles en esas fechas")
+            continue
+
         print("Habitaciones seleccionadas:")
         for hab in habitaciones_validas:
             print(f">> {hab}")
         
         #confirmamos habs
-        confirmar = input("\n¿Confirmar estas habitaciones? (si/no): ").strip().lower()
+        confirmar = input("\nConfirmar estas habitaciones? (si/no): ").strip().lower()
+        
         if confirmar == 'si':
             habitaciones_seleccionadas = habitaciones_ids_limpios
             break
@@ -185,11 +263,16 @@ def crear_reserva(habitaciones, servicios, reservas):
             continue
 
     print("Servicios del hotel")
-    
-    print("Disponibilidad actual:")
+
+    print("Disponibilidad actual en las fechas de tu reserva:")
     for servicio in servicios:
-        disponible = servicio.capacidad_total - servicio.ocupado_actual
-        print(f"  {servicio.nombre.capitalize()}: {disponible} disponibles")
+        
+        _, disponible = verificar_disponibilidad_servicio(servicio.nombre, 0, servicios, reservas, check_in, check_out)
+        
+        if servicio.nombre == "desayuno" and "H204" in habitaciones_seleccionadas:
+            print(f"  {servicio.nombre.capitalize()}: {disponible - 1} disponibles")
+        else:
+            print(f"  {servicio.nombre.capitalize()}: {disponible} disponibles")
 
     servicios_seleccionados = []
     
@@ -202,8 +285,8 @@ def crear_reserva(habitaciones, servicios, reservas):
 
         if total_habitaciones == 2:
 
-            if verificar_disponibilidad_servicio("desayuno", 1, servicios):
-                
+            _, total_desayunos = verificar_disponibilidad_servicio("desayuno", 0, servicios, reservas, check_in, check_out)
+            if total_desayunos >= 2:
                 if input("Anadir desayuno para la otra habitación? (s/n): ").strip().lower() == "s":
                 
                     servicios_seleccionados = ["desayuno:2"]
@@ -226,7 +309,8 @@ def crear_reserva(habitaciones, servicios, reservas):
 
             if input("Incluir desayuno? (si/no): ").strip().lower() == "si":
                 
-                if verificar_disponibilidad_servicio("desayuno", 1, servicios):
+                disponible, _ = verificar_disponibilidad_servicio("desayuno", 1, servicios, reservas, check_in, check_out)
+                if disponible:
                     servicios_seleccionados.append("desayuno:1")
                     print("Desayuno anadido: 1 servicio")
                 else:
@@ -248,8 +332,8 @@ def crear_reserva(habitaciones, servicios, reservas):
                         print("sin desayuno")
                         break
                     if cantidad == 1:
-                        if verificar_disponibilidad_servicio("desayuno", cantidad, servicios):
-                            
+                        disponible, _ = verificar_disponibilidad_servicio("desayuno", cantidad, servicios, reservas, check_in, check_out)
+                        if disponible:    
                             servicios_seleccionados.append("desayuno:1")
                             print("Desayuno anadido: 1 servicio")
                             print("Solo 1 habitacion tendra desayuno")
@@ -257,8 +341,8 @@ def crear_reserva(habitaciones, servicios, reservas):
                         else:
                             print("No hay desayunos disponibles")
                     elif cantidad == 2:
-                        if verificar_disponibilidad_servicio("desayuno", cantidad, servicios):
-                            
+                        disponible, _ = verificar_disponibilidad_servicio("desayuno", cantidad, servicios, reservas, check_in, check_out)
+                        if disponible: 
                             servicios_seleccionados.append("desayuno:2")
                             print("Desayuno anadido: 2 servicio")
                             print("Las 2 habitaciones tendran desayuno")
@@ -279,7 +363,8 @@ def crear_reserva(habitaciones, servicios, reservas):
                         print("Debe ser 1 o 2")
                         continue
                     
-                    if verificar_disponibilidad_servicio("masaje", cantidad, servicios):
+                    disponible, _ = verificar_disponibilidad_servicio("masaje", cantidad, servicios, reservas, check_in, check_out)
+                    if disponible:
                         servicios_seleccionados.append(f"masaje:{cantidad}")
                         print(f"Masaje anadido: {cantidad} servicio(s)")
                         break
@@ -295,6 +380,7 @@ def crear_reserva(habitaciones, servicios, reservas):
     print(f"Cliente: {cliente}")
     print(f"Fechas: {check_in.strftime('%d-%m-%Y')} al {check_out.strftime('%d-%m-%Y')}")
     print(f"Habitaciones: {', '.join(habitaciones_seleccionadas)}")
+    
     if servicios_seleccionados:
         servicios_texto = ', '.join(servicios_seleccionados)
         print("Servicios: " + servicios_texto)
@@ -303,18 +389,7 @@ def crear_reserva(habitaciones, servicios, reservas):
     
     confirmar_reserva = input("\n¿Confirmar la reserva? (si/no): ").strip().lower()
     if confirmar_reserva == 'si':
-        
-        for servicio_str in servicios_seleccionados:
-            nombre, cantidad_str = servicio_str.split(':')
-            cantidad_int = int(cantidad_str)
-            
-            for servicio in servicios:
-                if servicio.nombre == nombre:
-                    if servicio.ocupar(cantidad_int): #para aprovechar la func disponibilidad
-                        print(f"{nombre.capitalize()}: {cantidad_int} unidad(es) ocupada(s)")
-                    else:
-                        print(f"Error al ocupar {nombre}") 
-        
+    
         nueva_reserva = Reserva(
             cliente=cliente,
             habitaciones_ids=habitaciones_seleccionadas,

@@ -18,32 +18,14 @@ class Habitacion:
         
 class Servicio:
 
-    def __init__ (self, nombre, capacidad_total, ocupado_actual = 0):
+    def __init__ (self, nombre, capacidad_total):
 
         self.nombre = nombre
         self.capacidad_total = capacidad_total
-        self.ocupado_actual = ocupado_actual
     
     def __str__(self):
-        return f"{self.nombre}: {self.ocupado_actual} de {self.capacidad_total} ocupados"
+        return f"{self.nombre}: capacidad {self.capacidad_total}"
     
-    def disponibilidad(self, cantidad_necesaria=1):
-        return (self.ocupado_actual + cantidad_necesaria) <= self.capacidad_total 
-    
-    def ocupar(self, cantidad=1):
-        
-        if self.disponibilidad(cantidad):
-            self.ocupado_actual += cantidad
-            return True
-        return False
-    
-    def liberar(self, cantidad = 1):
-
-        if self.ocupado_actual >= cantidad:
-            self.ocupado_actual -= cantidad
-        else:
-            self.ocupado_actual = 0
-
 class Reserva:
 
     def __init__(self, cliente, habitaciones_ids, servicios_nombres, check_in, check_out):

@@ -1,20 +1,75 @@
 {
   "habitaciones": [
-    {"id": "H101", "tipo": "simple", "vista_mar": false, "piso": 1},
-    {"id": "H102", "tipo": "simple", "vista_mar": false, "piso": 1},
-    {"id": "H103", "tipo": "simple", "vista_mar": false, "piso": 1},
-    {"id": "H104", "tipo": "doble", "vista_mar": false, "piso": 1},
-    {"id": "H201", "tipo": "simple", "vista_mar": true, "piso": 2},
-    {"id": "H202", "tipo": "simple", "vista_mar": false, "piso": 2},
-    {"id": "H203", "tipo": "doble", "vista_mar": true, "piso": 2},
-    {"id": "H204", "tipo": "suite", "vista_mar": true, "piso": 2}
-    ],
-    
+    {
+      "id": "H101",
+      "tipo": "simple",
+      "vista_mar": false,
+      "piso": 1
+    },
+    {
+      "id": "H102",
+      "tipo": "simple",
+      "vista_mar": false,
+      "piso": 1
+    },
+    {
+      "id": "H103",
+      "tipo": "simple",
+      "vista_mar": false,
+      "piso": 1
+    },
+    {
+      "id": "H104",
+      "tipo": "doble",
+      "vista_mar": false,
+      "piso": 1
+    },
+    {
+      "id": "H201",
+      "tipo": "simple",
+      "vista_mar": true,
+      "piso": 2
+    },
+    {
+      "id": "H202",
+      "tipo": "simple",
+      "vista_mar": false,
+      "piso": 2
+    },
+    {
+      "id": "H203",
+      "tipo": "doble",
+      "vista_mar": true,
+      "piso": 2
+    },
+    {
+      "id": "H204",
+      "tipo": "suite",
+      "vista_mar": true,
+      "piso": 2
+    }
+  ],
   "servicios": [
-    {"nombre": "desayuno", "capacidad_total": 4, "ocupado_actual": 0},
-    {"nombre": "masaje", "capacidad_total": 2, "ocupado_actual": 0}
-    ],
-
-    "reservas": []
-
+    {
+      "nombre": "desayuno",
+      "capacidad_total": 4
+    },
+    {
+      "nombre": "masaje",
+      "capacidad_total": 2
+    }
+  ],
+  "reservas": [
+    {
+      "cliente": "g",
+      "habitaciones": [
+        "H204"
+      ],
+      "servicios": [
+        "desayuno:1"
+      ],
+      "check_in": "2026-02-01",
+      "check_out": "2026-02-03"
+    }
+  ]
 }
