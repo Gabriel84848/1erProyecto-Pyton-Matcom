@@ -1,6 +1,6 @@
 from datetime import datetime, date
 
-def obtener_habitaciones_disponibles(check_in, check_out, habitaciones, reservas):
+def obtener_habitaciones_disponibles(check_in, check_out, habitaciones, reservas, servicios = None):
 
     hab_disponibles = []
     for hab in habitaciones:
@@ -12,8 +12,19 @@ def obtener_habitaciones_disponibles(check_in, check_out, habitaciones, reservas
 
                     ocupada = True
                     break
-        if not ocupada:
-            hab_disponibles.append(hab)
+        
+        if ocupada:
+            continue
+        
+        if hab.id == "H204" and servicios:
+    
+            disponible, _ = verificar_disponibilidad_servicio("desayuno", 1, servicios, reservas, check_in, check_out)
+            if not disponible:
+    
+                continue
+        
+        hab_disponibles.append(hab)
+    
     return hab_disponibles
 
 def verificar_disponibilidad_servicio(nombre_servicio, cantidad_necesaria, servicios, reservas, check_in, check_out):

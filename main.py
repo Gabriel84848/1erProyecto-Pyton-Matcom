@@ -190,37 +190,33 @@ def crear_reserva(habitaciones, servicios, reservas):
         input("Presiona Enter para volver al menú...")
         return
 
-    habitaciones_disponibles = obtener_habitaciones_disponibles(check_in, check_out, habitaciones, reservas)
+    habitaciones_disponibles = obtener_habitaciones_disponibles(check_in, check_out, habitaciones, reservas, servicios)
 
     if not habitaciones_disponibles:
         print("No hay habitaciones disponibles para esas fechas")
         input("Enter para continuar...")
         return
-
-    #chequear disponibilidad suite
-    suite_h204 = None
-    for hab in habitaciones_disponibles:
-        if hab.id == "H204":
-            disponible, _ = verificar_disponibilidad_servicio("desayuno", 1, servicios, reservas, check_in, check_out)
-            if disponible:
-                suite_h204 = hab
-                break
     
     print("HABITACIONES DISPONIBLES:")
 
     print("\nPISO 1:")
     for hab in habitaciones_disponibles:
-        if hab.piso == 1 and hab.id != "H204":  
+        if hab.piso == 1:
             print(f"  {hab}")
     
     print("\nPISO 2:")
     for hab in habitaciones_disponibles:
-        if hab.piso == 2 and hab.id != "H204":  
+        if hab.piso == 2:  
             print(f"  {hab}")
 
-    if suite_h204:
-        print("SUITE DISPONIBLE (incluye desayuno automatico):")
-        print(f"{suite_h204}")
+    suite_en_lista = False
+    for hab in habitaciones_disponibles:
+        if hab.id == "H204":
+            suite_en_lista = True
+            break
+
+    if suite_en_lista:
+        print("SUITE H204 DISPONIBLE (incluye desayuno obligatorio)")
     
     print("SELECCION DE HABITACIONES")
     print("Maximo 2 y deben estar en el mismo piso")
@@ -236,17 +232,13 @@ def crear_reserva(habitaciones, servicios, reservas):
             if id_limpio:  
                 habitaciones_ids_limpios.append(id_limpio)
 
-        valido, mensaje, habitaciones_validas =  validar_seleccion_habitaciones(habitaciones_ids_limpios, habitaciones, reservas, check_in, check_out)
+        valido, mensaje, habitaciones_validas =  validar_seleccion_habitaciones(habitaciones_ids_limpios, habitaciones, reservas, check_in, check_out, servicios)
 
         if not valido: #se parte y da el por que
             print(f"{mensaje}")
             continue
+        
         print(f"{mensaje}") #retorna
-
-        if "H204" in habitaciones_ids_limpios and suite_h204 is None:
-            print("No se puede reservar la suite:")
-            print("No hay desayunos disponibles en esas fechas")
-            continue
 
         print("Habitaciones seleccionadas:")
         for hab in habitaciones_validas:
