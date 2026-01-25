@@ -18,10 +18,9 @@ def Menu():
     print("3. ver Reservas existentes")
     print("4. Crear nueva reserva ")
     print("5. Cancelar reserva existente")
-    print("6. Guardar cambios")
-    print("7. Salir")
+    print("6. Salir")
 
-    return input("selecciona una opcion (1 - 7): ")
+    return input("selecciona una opcion (1 - 6): ")
 
 def ver_habitaciones(habitaciones):
 
@@ -70,7 +69,7 @@ def ver_reservas(reservas):
         else:
             print("Servicios: Ninguno")
 
-def cancelar_reserva(reservas, servicios):
+def cancelar_reserva(reservas, servicios, habitaciones):
     print("CANCELAR RESERVA")
     
     if not reservas:
@@ -123,6 +122,7 @@ def cancelar_reserva(reservas, servicios):
         print()
         print("Reserva cancelada exitosamente!")
         print("Las habitaciones y servicios han sido liberados.")
+        guardar_datos(habitaciones, servicios, reservas)
     else:
         print("Cancelación cancelada por el usuario.")
 
@@ -156,16 +156,10 @@ def main():
         
         elif opcion == "5":
             clear()
-            cancelar_reserva(reservas, servicios)
-            input("\nPresiona Enter para volver al menu")
-        
-        elif opcion == "6":
-            clear()
-            guardar_datos(habitaciones, servicios, reservas)
-            print("Datos guardados exitosamente!")
+            cancelar_reserva(reservas, servicios, habitaciones)
             input("\nPresiona Enter para volver al menu")
 
-        elif opcion == "7":
+        elif opcion == "6":
             clear()
             print("Saliste")
             break
@@ -261,11 +255,9 @@ def crear_reserva(habitaciones, servicios, reservas):
         
         _, disponible = verificar_disponibilidad_servicio(servicio.nombre, 0, servicios, reservas, check_in, check_out)
         
-        if servicio.nombre == "desayuno" and "H204" in habitaciones_seleccionadas:
-            print(f"  {servicio.nombre.capitalize()}: {disponible - 1} disponibles")
-        else:
-            print(f"  {servicio.nombre.capitalize()}: {disponible} disponibles")
-
+        print(f"  {servicio.nombre.capitalize()}: {disponible} disponibles")
+    if "H204" in habitaciones_seleccionadas:
+        print(f"La suite H204 incluye 1 desayuno con su reserva")
     servicios_seleccionados = []
     
     #SUIT
@@ -391,6 +383,8 @@ def crear_reserva(habitaciones, servicios, reservas):
         )
         reservas.append(nueva_reserva)
         print("\nRESERVA CREADA EXITOSAMENTE!")
+        
+        guardar_datos(habitaciones, servicios, reservas)
         
         print("\nDetalles de la reserva:")
         print(f"  • Cliente: {cliente}")

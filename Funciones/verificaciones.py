@@ -1,5 +1,5 @@
-from Funciones.disponibilidad import obtener_habitaciones_disponibles
-    
+from Funciones.disponibilidad import obtener_habitaciones_disponibles, verificar_disponibilidad_servicio
+
 def validar_seleccion_habitaciones(habitaciones_ids, habitaciones, reservas, check_in, check_out, servicios=None):
    
     if len(habitaciones_ids) > 2:
