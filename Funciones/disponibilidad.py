@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import date, timedelta
 
 def obtener_habitaciones_disponibles(check_in, check_out, habitaciones, reservas, servicios = None):
 
@@ -52,3 +52,46 @@ def verificar_disponibilidad_servicio(nombre_servicio, cantidad_necesaria, servi
     disponible_en_intervalo = servicio_obj.capacidad_total - ocupados_en_intervalo
     return disponible_en_intervalo>=cantidad_necesaria, disponible_en_intervalo
 
+def buscar_hueco_automatico(habitaciones_ids, servicios_seleccionados, noches, habitaciones, servicios, reservas):
+
+    hoy = date.today()
+    limite = hoy.replace(year=hoy.year + 2)
+    
+    inicio = hoy
+    while inicio <= limite:
+        fin = inicio + timedelta(days=noches)
+        if fin > limite:
+            break
+        
+        habitaciones_disponibles = obtener_habitaciones_disponibles(inicio, fin, habitaciones, reservas, servicios)
+        
+        todas_disponibles = True
+        for id_hab in habitaciones_ids:
+            disponible = False
+            for hab in habitaciones_disponibles:
+                if hab.id == id_hab:
+                    disponible = True
+                    break
+            if not disponible:
+                todas_disponibles = False
+                break
+
+        if todas_disponibles:
+    
+            servicios_ok = True
+            for servicio_str in servicios_seleccionados:
+                nombre, cantidad_str = servicio_str.split(':')
+                cantidad = int(cantidad_str)
+                
+                disponible, _ = verificar_disponibilidad_servicio(nombre, cantidad, servicios, reservas, inicio, fin)
+                
+                if not disponible:
+                    servicios_ok = False
+                    break
+        
+            if servicios_ok:
+                return inicio, fin
+    
+        inicio += timedelta(days=1)
+
+    return None, None

@@ -61,15 +61,28 @@
   ],
   "reservas": [
     {
-      "cliente": "g",
+      "cliente": "DIDYEPSTIEN",
       "habitaciones": [
-        "H204"
+        "H101"
       ],
       "servicios": [
-        "desayuno:1"
+        "desayuno:1",
+        "masaje:2"
       ],
-      "check_in": "2026-02-01",
-      "check_out": "2026-02-03"
+      "check_in": "2026-02-02",
+      "check_out": "2026-02-07"
+    },
+    {
+      "cliente": "Charlie kirk",
+      "habitaciones": [
+        "H101"
+      ],
+      "servicios": [
+        "desayuno:1",
+        "masaje:1"
+      ],
+      "check_in": "2026-02-07",
+      "check_out": "2026-02-17"
     }
   ]
 }

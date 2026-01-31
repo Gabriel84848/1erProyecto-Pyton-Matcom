@@ -47,3 +47,17 @@ def validar_seleccion_habitaciones(habitaciones_ids, habitaciones, reservas, che
             return False, "Las habitaciones estan en pisos diferentes", []
     
     return True, "Habitaciones validas", habitaciones_validas
+
+def pedir_si_no_cancelar(pregunta):
+
+    while True:
+        respuesta = input(pregunta).strip().lower()
+        
+        if respuesta == "si" or respuesta == "sí":
+            return "si"
+        elif respuesta == "no":
+            return "no"
+        elif respuesta == "cancelar":
+            return "cancelar"
+        else:
+            print("Por favor, introduce 'si', 'no' o 'cancelar'")

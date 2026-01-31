@@ -33,15 +33,21 @@ class Reserva:
         self.habitaciones_ids = habitaciones_ids 
         self.servicios_nombres = servicios_nombres 
 
-        if isinstance(check_in, str):    #convierte a dtaetime
-            self.check_in = datetime.fromisoformat(check_in) 
+        if isinstance(check_in, str):  #convierte a date
+            temp = datetime.fromisoformat(check_in)
+            self.check_in = temp.date() 
+        elif isinstance(check_in, datetime):
+            self.check_in = check_in.date()  
         else:
-            self.check_in = check_in
+            self.check_in = check_in 
             
         if isinstance(check_out, str):
-            self.check_out = datetime.fromisoformat(check_out)
+            temp = datetime.fromisoformat(check_out)
+            self.check_out = temp.date()  
+        elif isinstance(check_out, datetime):
+            self.check_out = check_out.date()  
         else:
-            self.check_out = check_out        
+            self.check_out = check_out         
 
     def to_dict(self):
         return {
