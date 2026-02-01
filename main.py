@@ -267,14 +267,13 @@ def crear_reserva(habitaciones, servicios, reservas):
 
     print("Servicios del hotel")
 
+    _, desayunos_disponibles = verificar_disponibilidad_servicio("desayuno", 0, servicios, reservas, check_in, check_out)
+    _, masajes_disponibles = verificar_disponibilidad_servicio("masaje", 0, servicios, reservas, check_in, check_out)
+    
     print("Disponibilidad actual en las fechas de tu reserva:")
-    for servicio in servicios:
-        
-        _, disponible = verificar_disponibilidad_servicio(servicio.nombre, 0, servicios, reservas, check_in, check_out)
-        
-        print(f"  {servicio.nombre.capitalize()}: {disponible} disponibles")
-    if "H204" in habitaciones_seleccionadas:
-        print(f"La suite H204 incluye 1 desayuno con su reserva")
+    print(f"  Desayuno: {desayunos_disponibles} disponibles") 
+    print(f"  Masaje: {masajes_disponibles} disponibles")
+    
     servicios_seleccionados = []
     
     #SUIT
@@ -286,8 +285,7 @@ def crear_reserva(habitaciones, servicios, reservas):
 
         if total_habitaciones == 2:
 
-            _, total_desayunos = verificar_disponibilidad_servicio("desayuno", 0, servicios, reservas, check_in, check_out)
-            if total_desayunos >= 2:
+            if desayunos_disponibles >= 2:
                 respuesta = pedir_si_no_cancelar("Añadir desayuno para la otra habitación? (s/n/cancelar): ")
                 if respuesta == "cancelar":
                     print("Reserva cancelada.")
@@ -305,80 +303,141 @@ def crear_reserva(habitaciones, servicios, reservas):
         print("Servicio de desayunos")
 
         total_habitaciones = len(habitaciones_seleccionadas)
-        
-        if total_habitaciones == 1:
 
-            respuesta = pedir_si_no_cancelar("Incluir desayuno? (si/no/cancelar): ")
+        if desayunos_disponibles <= 0:
+            print("No hay desayunos disponibles en estas fechas.")
+            
+            respuesta = pedir_si_no_cancelar("¿Desea continuar con la reserva sin desayuno? (si/no): ")
+            
+            if respuesta == "no" or respuesta =="cancelar":
+                print("Reserva cancelada por el usuario.")
+                return
+            
+            print("Continuando sin desayuno...")
+
+        else:
+            if total_habitaciones == 1:
+
+                respuesta = pedir_si_no_cancelar("Incluir desayuno? (si/no/cancelar): ")
+                if respuesta == "cancelar":
+                    print("Reserva cancelada.")
+                    return
+                elif respuesta == "si":
+                    disponible, _ = verificar_disponibilidad_servicio("desayuno", 1, servicios, reservas, check_in, check_out)
+                    if disponible:
+                        servicios_seleccionados.append("desayuno:1")
+                        print("Desayuno anadido: 1 servicio")
+                    else:
+                        print("No hay desayunos disponibles")
+
+            else: #2 hab
+                
+                while True:
+                    try:
+                        print(f"Desayunos disponibles: {desayunos_disponibles}")
+                        print("Cuantos desayunos deseas en tu reserva?")
+                        cantidad = int(input(" Cantidad (0, 1 o 2): "))
+
+                        if cantidad <0 or cantidad >2:
+                            print("Debe ser 0, 1 o 2")
+                            continue
+                        if cantidad == 0:
+                            print("sin desayuno")
+                            break
+                        if cantidad > desayunos_disponibles:
+                            print(f"Error: Solo hay {desayunos_disponibles} desayuno(s) disponible(s)")
+                            continue
+
+                        disponible, _ = verificar_disponibilidad_servicio("desayuno", cantidad, servicios, reservas, check_in, check_out)
+                        
+                        if cantidad == 1:
+                            
+                            if disponible:    
+                                servicios_seleccionados.append("desayuno:1")
+                                print("Desayuno anadido: 1 servicio")
+                                print("Solo 1 habitacion tendra desayuno")
+                                break
+                            else:
+                                print("No hay desayunos disponibles")
+                        elif cantidad == 2:
+                
+                            if disponible: 
+                                servicios_seleccionados.append("desayuno:2")
+                                print("Desayuno anadido: 2 servicio")
+                                print("Las 2 habitaciones tendran desayuno")
+                                break
+                            else:
+                                print("No hay 2 desayunos disponibles")    
+                    except ValueError:
+                        print("Ingresa un numero (0, 1 o 2)")
+                    
+    print("Servicio de masajes")
+
+    if masajes_disponibles <= 0:
+        print("No hay masajes disponibles en estas fechas.")
+        
+        respuesta = pedir_si_no_cancelar("¿Desea continuar con la reserva sin masaje? (si/no): ")
+        
+        if respuesta == "no" or respuesta == "cancelar":
+            print("Reserva cancelada por el usuario.")
+            return
+        print("Continuando sin masaje...")
+    
+    else:
+        total_habitaciones = len(habitaciones_seleccionadas)
+
+        if total_habitaciones == 1:
+            respuesta = pedir_si_no_cancelar("Incluir masaje? (si/no/cancelar): ")
             if respuesta == "cancelar":
                 print("Reserva cancelada.")
                 return
             elif respuesta == "si":
-                disponible, _ = verificar_disponibilidad_servicio("desayuno", 1, servicios, reservas, check_in, check_out)
+                disponible, _ = verificar_disponibilidad_servicio("masaje", 1, servicios, reservas, check_in, check_out)
                 if disponible:
-                    servicios_seleccionados.append("desayuno:1")
-                    print("Desayuno anadido: 1 servicio")
+                    servicios_seleccionados.append("masaje:1")
+                    print("Masaje anadido: 1 servicio")
                 else:
-                    print("No hay desayunos disponibles")
+                    print("No hay masajes disponibles")
 
-        else: #2 hab
-            
+        else:  # 2 habitaciones
             while True:
                 try:
-                    print("Cuantos desayunos deseas en tu reserva?")
+                    print(f"Masajes disponibles: {masajes_disponibles}")
+                    print("Cuantos masajes deseas en tu reserva?")
                     cantidad = int(input(" Cantidad (0, 1 o 2): "))
 
-                    if cantidad <0 or cantidad >2:
+                    if cantidad < 0 or cantidad > 2:
                         print("Debe ser 0, 1 o 2")
                         continue
                     if cantidad == 0:
-                        print("sin desayuno")
+                        print("sin masaje")
                         break
-                    if cantidad == 1:
-                        disponible, _ = verificar_disponibilidad_servicio("desayuno", cantidad, servicios, reservas, check_in, check_out)
-                        if disponible:    
-                            servicios_seleccionados.append("desayuno:1")
-                            print("Desayuno anadido: 1 servicio")
-                            print("Solo 1 habitacion tendra desayuno")
-                            break
-                        else:
-                            print("No hay desayunos disponibles")
-                    elif cantidad == 2:
-                        disponible, _ = verificar_disponibilidad_servicio("desayuno", cantidad, servicios, reservas, check_in, check_out)
-                        if disponible: 
-                            servicios_seleccionados.append("desayuno:2")
-                            print("Desayuno anadido: 2 servicio")
-                            print("Las 2 habitaciones tendran desayuno")
-                            break
-                        else:
-                            print("No hay 2 desayunos disponibles")    
-                except ValueError:
-                    print("Ingresa un numero (0, 1 o 2)")
-                    
-        print("Servicio de masajes")
-
-        respuesta = pedir_si_no_cancelar("Incluir masaje? (si/no/cancelar): ")
-        if respuesta == "cancelar":
-            print("Reserva cancelada.")
-            return
-        elif respuesta == "si":
-            while True:
-                try:
-                    cantidad = int(input("   Cantidad (1 o 2): "))
-                
-                    if cantidad not in [1, 2]:
-                        print("Debe ser 1 o 2")
+                    if cantidad > masajes_disponibles:
+                        print(f"Error: Solo hay {masajes_disponibles} masaje(s) disponible(s)")
                         continue
                     
                     disponible, _ = verificar_disponibilidad_servicio("masaje", cantidad, servicios, reservas, check_in, check_out)
-                    if disponible:
-                        servicios_seleccionados.append(f"masaje:{cantidad}")
-                        print(f"Masaje anadido: {cantidad} servicio(s)")
-                        break
-                    
-                    else:
-                        print("No hay esa cantidad de servicios de masaje disponibles")
+
+                    if cantidad == 1:
+                        
+                        if disponible:
+                            servicios_seleccionados.append("masaje:1")
+                            print("Masaje anadido: 1 servicio")
+                            print("Solo 1 habitacion tendra masaje")
+                            break
+                        else:
+                            print("No hay masajes disponibles")
+                    elif cantidad == 2:
+                        
+                        if disponible:
+                            servicios_seleccionados.append("masaje:2")
+                            print("Masaje anadido: 2 servicio")
+                            print("Las 2 habitaciones tendran masaje")
+                            break
+                        else:
+                            print("No hay 2 masajes disponibles")
                 except ValueError:
-                    print("Ingresa un numero (1 o 2)")
+                    print("Ingresa un numero (0, 1 o 2)")
     
     print("RESUMEN DE RESERVA")
     print(f"Cliente: {cliente}")
@@ -448,52 +507,80 @@ def buscar_hueco_interfaz(habitaciones, servicios, reservas):
         return
     
     print("DESAYUNOS")
-    print("Cantidad de desayunos (0, 1 o 2)")
-    
-    if "H204" in habitaciones_ids:
-        print("NOTA: La suite H204 incluye 1 desayuno obligatorio")
-    
-    while True:
-        desayunos_input = input("Cantidad de desayunos: ").strip()
-        if desayunos_input.lower() == "cancelar":
-            return
-        
-        try:
-            desayunos = int(desayunos_input)
-            if desayunos < 0 or desayunos > 2:
-                print("Debe ser 0, 1 o 2")
-                continue
+
+    tiene_suite = "H204" in habitaciones_ids
+
+    if len(habitaciones_ids) == 1:
+        if tiene_suite:
             
-            if "H204" in habitaciones_ids and desayunos == 0:
+            desayunos = 1
+            print("La suite H204 incluye 1 desayuno obligatorio.")
+        else:
+            respuesta = pedir_si_no_cancelar("Incluir desayuno? (si/no/cancelar): ")
+            if respuesta == "cancelar":
+                return
+            elif respuesta == "si":
                 desayunos = 1
-                print("(Se ajusto a 1 desayuno por la suite H204)")
-            
-            if desayunos > len(habitaciones_ids):
-                print(f"No puedes pedir {desayunos} desayunos para {len(habitaciones_ids)} habitación(es)")
-                continue
-            
-            break
-        except ValueError:
-            print("Ingresa un numero (0, 1 o 2)")
-    
+            else:
+                desayunos = 0
+
+    else:  # 2 habitaciones
+        if tiene_suite:
+            print("La suite H204 incluye 1 desayuno obligatorio.")
+            respuesta = pedir_si_no_cancelar("¿Añadir desayuno para la otra habitacion? (si/no/cancelar): ")
+            if respuesta == "cancelar":
+                return
+            elif respuesta == "si":
+                desayunos = 2
+            else:
+                desayunos = 1
+        else:
+            while True:
+                try:
+                    cantidad_input = input("Cantidad de desayunos (0, 1 o 2): ").strip()
+                    if cantidad_input.lower() == "cancelar":
+                        return
+                    cantidad = int(cantidad_input)
+                    if cantidad < 0 or cantidad > 2:
+                        print("Debe ser 0, 1 o 2.")
+                        continue
+                    if cantidad > len(habitaciones_ids):
+                        print(f"No puedes pedir {cantidad} desayunos para {len(habitaciones_ids)} habitación(es).")
+                        continue
+                    desayunos = cantidad
+                    break
+                except ValueError:
+                    print("Ingresa un número (0, 1 o 2).")
+
     print("MASAJES")
-    print("Cantidad de masajes (0, 1 o 2)")
-    print("Recuerda: Maximo 2 por reserva")
-    
-    while True:
-        masajes_input = input("Cantidad de masajes: ").strip()
-        if masajes_input.lower() == "cancelar":
+
+    if len(habitaciones_ids) == 1:
+        respuesta = pedir_si_no_cancelar("Incluir masaje? (si/no/cancelar): ")
+        if respuesta == "cancelar":
             return
-        
-        try:
-            masajes = int(masajes_input)
-            if masajes < 0 or masajes > 2:
-                print("Debe ser 0, 1 o 2")
-                continue
-            break
-        except ValueError:
-            print("Ingresa un numero (0, 1 o 2)")
-    
+        elif respuesta == "si":
+            masajes = 1
+        else:
+            masajes = 0
+    else:  # 2 habitaciones
+        while True:
+            try:
+                cantidad_input = input("Cantidad de masajes (0, 1 o 2): ").strip()
+                if cantidad_input.lower() == "cancelar":
+                    return
+                cantidad = int(cantidad_input)
+                if cantidad < 0 or cantidad > 2:
+                    print("Debe ser 0, 1 o 2.")
+                    continue
+                if cantidad > len(habitaciones_ids):
+                    print(f"No puedes pedir {cantidad} masajes para {len(habitaciones_ids)} habitación(es).")
+                    continue
+                masajes = cantidad
+                break
+            except ValueError:
+                print("Ingresa un numero (0, 1 o 2).")
+
+    # Construir lista de servicios
     servicios_seleccionados = []
     if desayunos > 0:
         servicios_seleccionados.append(f"desayuno:{desayunos}")

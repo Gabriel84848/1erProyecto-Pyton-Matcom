@@ -61,3 +61,8 @@ def pedir_si_no_cancelar(pregunta):
             return "cancelar"
         else:
             print("Por favor, introduce 'si', 'no' o 'cancelar'")
+
+
+
+
+            
