@@ -1,18 +1,19 @@
 from datetime import date
 
 def obtener_fechas():
-    print("Introduzca las fechas de la reserva")
+    print("Introduce las fechas de la reserva")
+    print("Formato: DD-MM-AAAA")
     print("Escribe 'cancelar' en cualquier momento para salir")
 
     hoy = date.today()
     while True:
         try:
-            print("Check-in")
+            print("CHECK-IN")
 
             fecha_in_str = input("   Fecha (DD-MM-AAAA) o 'cancelar': ").strip()
 
             if fecha_in_str.lower() == 'cancelar':
-                print("Cancelado por usuario")
+                print("Cancelado por el usuario")
                 return None, None
             
             #2 guiones para que no se parte el split
@@ -28,24 +29,24 @@ def obtener_fechas():
             check_in = date(ano, mes, dia)
 
             if check_in < hoy:
-                print(f"El check-in no puede ser en el pasado")
+                print(f"Error: El check-in no puede ser en el pasado.")
                 print(f"Hoy es: {hoy.strftime('%d-%m-%Y')}")
                 continue
             
             maxima_fecha = hoy.replace(year=hoy.year + 2)
             
             if check_in > maxima_fecha:
-                print(f"De aqui a 2 anos pueden pasar muchas cosas")
+                print(f"Error: No se aceptan reservas con más de 2 años de antelación.")
                 print(f"Fecha máxima permitida: {maxima_fecha.strftime('%d-%m-%Y')}")
                 continue
 
-            print(f"Check-in valido: {check_in.strftime('%d-%m-%Y')}")
+            print(f"✓ Check-in válido: {check_in.strftime('%d-%m-%Y')}")
             break
             
         except ValueError:
-            print("Fecha invalida. Asegurate de usar numeros correctos")
+            print("Fecha inválida. Asegúrate de usar números correctos.")
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Error inesperado: {e}")
     
     while True:
         try:
@@ -53,7 +54,7 @@ def obtener_fechas():
             fecha_out_str = input("   Fecha (DD-MM-AAAA): ").strip()
 
             if fecha_out_str.lower() == 'cancelar':
-                print("Cancelado por usuario")
+                print("Cancelado por el usuario")
                 return None, None
             
             if fecha_out_str.count('-') != 2:
@@ -69,26 +70,28 @@ def obtener_fechas():
             check_out = date(ano, mes, dia)
             
             if check_out <= check_in:
-                print(f"El check-out debe ser despues del check-in")
+                print(f"Error: El check-out debe ser después del check-in.")
                 print(f"Check-in: {check_in.strftime('%d-%m-%Y')}")
                 continue
             
             if (check_out - check_in).days < 1:
-                print("La estancia minima es de 1 dia completo")
+                print("Error: La estancia mínima es de 1 día completo.")
                 continue
             
-            print(f"Check-out valido: {check_out.strftime('%d-%m-%Y')}")
+            print(f"✓ Check-out válido: {check_out.strftime('%d-%m-%Y')}")
             break
             
         except ValueError:
-            print("Fecha invalida. Asegurate de usar numeros correctos")
+            print("Fecha inválida. Asegúrate de usar números correctos.")
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Error inesperado: {e}")
     
     noches = (check_out - check_in).days
-    print("FECHAS CONFIRMADAS:")
+    print("\n" + "="*30)
+    print("FECHAS CONFIRMADAS")
+    print("="*30)
     print(f"Check-in:  {check_in.strftime('%d-%m-%Y')}")
     print(f"Check-out: {check_out.strftime('%d-%m-%Y')}")
-    print(f"Noches:  {noches}")
+    print(f"Noches:    {noches}")
     
     return check_in, check_out

@@ -3,10 +3,10 @@ from Funciones.disponibilidad import obtener_habitaciones_disponibles, verificar
 def validar_seleccion_habitaciones(habitaciones_ids, habitaciones, reservas, check_in, check_out, servicios=None):
    
     if len(habitaciones_ids) > 2:
-        return False, "Maximo 2 habitaciones por reserva", []
+        return False, "Máximo 2 habitaciones por reserva", []
     
     if len(habitaciones_ids) == 0:
-        return False, "Debe seleccionar al menos una habitacion", []
+        return False, "Debe seleccionar al menos una habitación", []
     
     disponibles = obtener_habitaciones_disponibles(check_in, check_out, habitaciones, reservas, servicios)
 
@@ -21,7 +21,7 @@ def validar_seleccion_habitaciones(habitaciones_ids, habitaciones, reservas, che
                 break
         
         if existe is None:
-            return False, f"Habitacion '{id_hab}' no existe", []
+            return False, f"Habitación '{id_hab}' no existe", []
         
         #Que esta disponible
         disponible = None
@@ -37,16 +37,16 @@ def validar_seleccion_habitaciones(habitaciones_ids, habitaciones, reservas, che
                 if not tiene_desayuno:
                     return False, f"Suite H204 no disponible: No hay desayunos en esas fechas", []
             
-            return False, f"Habitacion '{id_hab}' no disponible en esas fechas", []
+            return False, f"Habitación '{id_hab}' no disponible en esas fechas", []
         
         habitaciones_validas.append(disponible)
         
     #Validar mismo piso
     if len(habitaciones_validas) == 2:
         if habitaciones_validas[0].piso != habitaciones_validas[1].piso:
-            return False, "Las habitaciones estan en pisos diferentes", []
+            return False, "Las habitaciones están en pisos diferentes", []
     
-    return True, "Habitaciones validas", habitaciones_validas
+    return True, "Habitaciones válidas", habitaciones_validas
 
 def pedir_si_no_cancelar(pregunta):
 
@@ -60,9 +60,4 @@ def pedir_si_no_cancelar(pregunta):
         elif respuesta == "cancelar":
             return "cancelar"
         else:
-            print("Por favor, introduce 'si', 'no' o 'cancelar'")
-
-
-
-
-            
+            print("Por favor, escribe 'si', 'no' o 'cancelar'.")

@@ -59,44 +59,5 @@
       "capacidad_total": 2
     }
   ],
-  "reservas": [
-    {
-      "cliente": "f",
-      "habitaciones": [
-        "H101",
-        "H102"
-      ],
-      "servicios": [
-        "desayuno:2",
-        "masaje:2"
-      ],
-      "check_in": "2026-02-01",
-      "check_out": "2026-02-04"
-    },
-    {
-      "cliente": "ga",
-      "habitaciones": [
-        "H204"
-      ],
-      "servicios": [
-        "desayuno:1",
-        "masaje:1"
-      ],
-      "check_in": "2026-02-06",
-      "check_out": "2026-02-09"
-    },
-    {
-      "cliente": "gt",
-      "habitaciones": [
-        "H101",
-        "H102"
-      ],
-      "servicios": [
-        "desayuno:2",
-        "masaje:1"
-      ],
-      "check_in": "2026-02-06",
-      "check_out": "2026-02-09"
-    }
-  ]
+  "reservas": []
 }
