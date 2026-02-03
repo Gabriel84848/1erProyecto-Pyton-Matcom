@@ -5,6 +5,9 @@ def validar_seleccion_habitaciones(habitaciones_ids, habitaciones, reservas, che
     if len(habitaciones_ids) > 2:
         return False, "Máximo 2 habitaciones por reserva", []
     
+    if len(habitaciones_ids) == 2 and habitaciones_ids[0] == habitaciones_ids[1]:
+        return False, "ERROR: Se selecciono la misma habitacion 2 veces", []
+    
     if len(habitaciones_ids) == 0:
         return False, "Debe seleccionar al menos una habitación", []
     

@@ -5,43 +5,63 @@ from pathlib import Path
 def cargar_datos():
     
     ruta = Path("Yeison.json")  #crear objeto Path
-    with ruta.open() as archivo:  #abrir y leer el archivo
-        datos = json.load(archivo) #guarda en datos el contenido del json
-    
-    lista_habitaciones=[]
-    for hab in datos["habitaciones"]:
-
-        nueva_habitacion = Habitacion(
-            hab["id"],
-            hab["tipo"],
-            hab["vista_mar"],
-            hab["piso"]
-        )
-        lista_habitaciones.append(nueva_habitacion)
-
-    lista_servicios = []
-    for serv in datos['servicios']:
-        nuevo_serv = Servicio(
-            serv["nombre"],
-            serv["capacidad_total"],
-        )
-        lista_servicios.append(nuevo_serv)
-    
-    lista_reservas = []
-    if "reservas" in datos:
-        for res in datos["reservas"]:
-
-            nueva_reserva = Reserva(
-                res["cliente"],
-                res["habitaciones"],
-                res["servicios"],
-                res["check_in"],
-                res["check_out"]
-            )
-            lista_reservas.append(nueva_reserva)
-
-    return lista_habitaciones, lista_servicios, lista_reservas  #listas de objetos preparadas par modificar
+    try:
+        with ruta.open() as archivo:  #abrir y leer el archivo
+            datos = json.load(archivo) #guarda en datos el contenido del json
         
+        lista_habitaciones=[]
+        for hab in datos["habitaciones"]:
+
+            nueva_habitacion = Habitacion(
+                hab["id"],
+                hab["tipo"],
+                hab["vista_mar"],
+                hab["piso"]
+            )
+            lista_habitaciones.append(nueva_habitacion)
+
+        lista_servicios = []
+        for serv in datos['servicios']:
+            nuevo_serv = Servicio(
+                serv["nombre"],
+                serv["capacidad_total"],
+            )
+            lista_servicios.append(nuevo_serv)
+        
+        lista_reservas = []
+        if "reservas" in datos:
+            for res in datos["reservas"]:
+
+                nueva_reserva = Reserva(
+                    res["cliente"],
+                    res["habitaciones"],
+                    res["servicios"],
+                    res["check_in"],
+                    res["check_out"]
+                )
+                lista_reservas.append(nueva_reserva)
+
+        return lista_habitaciones, lista_servicios, lista_reservas 
+    except Exception:
+        print("Error al cargar 'Yeison.json'. Usando datos por defecto.")
+        
+        habitaciones = [
+            Habitacion("H101", "simple", False, 1),
+            Habitacion("H102", "simple", False, 1),
+            Habitacion("H103", "simple", False, 1),
+            Habitacion("H104", "doble", False, 1),
+            Habitacion("H201", "simple", True, 2),
+            Habitacion("H202", "simple", False, 2),
+            Habitacion("H203", "doble", True, 2),
+            Habitacion("H204", "suite", True, 2)
+        ]
+        
+        servicios = [
+            Servicio("desayuno", 4),
+            Servicio("masaje", 2)
+        ]
+        
+        return habitaciones, servicios, []   
 
 def guardar_datos(habitaciones, servicios, reservas):
     

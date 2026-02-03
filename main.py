@@ -192,6 +192,7 @@ def crear_reserva(habitaciones, servicios, reservas):
         input("Presiona Enter para volver al menú...")
         return
     
+    clear()
     check_in, check_out = obtener_fechas()
 
     if check_in is None or check_out is None:
@@ -205,37 +206,36 @@ def crear_reserva(habitaciones, servicios, reservas):
         print("No hay habitaciones disponibles para esas fechas.")
         input("Presiona Enter para continuar...")
         return
-    
-    clear()
-    print("HABITACIONES DISPONIBLES:")
-
-    print("\nPISO 1:")
-    for hab in habitaciones_disponibles:
-        if hab.piso == 1:
-            print(f"  {hab}")
-    
-    print("\nPISO 2:")
-    for hab in habitaciones_disponibles:
-        if hab.piso == 2:  
-            print(f"  {hab}")
-
-    suite_en_lista = False
-    for hab in habitaciones_disponibles:
-        if hab.id == "H204":
-            suite_en_lista = True
-            break
-
-    if suite_en_lista:
-        print("SUITE H204 DISPONIBLE (incluye desayuno obligatorio)")
-    
-    print("\n" + "="*50)
-    print("SELECCIÓN DE HABITACIONES")
-    print("="*50)
-    print("Máximo 2 habitaciones, y deben estar en el mismo piso.")
-    print("Ingresa los IDs separados por comas (ejemplo: H101,H104)")
-    print("O escribe 'cancelar' para salir.")
 
     while True:
+        clear()
+        print("HABITACIONES DISPONIBLES:")
+
+        print("\nPISO 1:")
+        for hab in habitaciones_disponibles:
+            if hab.piso == 1:
+                print(f"  {hab}")
+        
+        print("\nPISO 2:")
+        for hab in habitaciones_disponibles:
+            if hab.piso == 2:  
+                print(f"  {hab}")
+
+        suite_en_lista = False
+        for hab in habitaciones_disponibles:
+            if hab.id == "H204":
+                suite_en_lista = True
+                break
+
+        if suite_en_lista:
+            print("SUITE H204 DISPONIBLE (incluye desayuno obligatorio)")
+        
+        print("\n" + "="*50)
+        print("SELECCIÓN DE HABITACIONES")
+        print("="*50)
+        print("Máximo 2 habitaciones, y deben estar en el mismo piso.")
+        print("Ingresa los IDs separados por comas (ejemplo: H101,H104)")
+        print("O escribe 'cancelar' para salir.")
     
         ids_input = input(">> ").strip().upper()
 
@@ -251,7 +251,8 @@ def crear_reserva(habitaciones, servicios, reservas):
                 habitaciones_ids_limpios.append(id_limpio)
 
         valido, mensaje, habitaciones_validas =  validar_seleccion_habitaciones(habitaciones_ids_limpios, habitaciones, reservas, check_in, check_out, servicios)
-
+        
+        clear()
         if not valido: #se parte y da el por que
             print(f"Error: {mensaje}")
             continue
@@ -282,7 +283,6 @@ def crear_reserva(habitaciones, servicios, reservas):
     
     print("\nDisponibilidad durante tu estancia:")
     print(f"  • Desayuno: {desayunos_disponibles} disponible(s)")
-    print(f"  • Masaje: {masajes_disponibles} disponible(s)")
     
     servicios_seleccionados = []
     
@@ -299,14 +299,17 @@ def crear_reserva(habitaciones, servicios, reservas):
                 respuesta = pedir_si_no_cancelar("¿Añadir desayuno para la otra habitación? (si/no/cancelar): ")
                 if respuesta == "cancelar":
                     print("Reserva cancelada.")
+                    input("\nPresiona Enter para continuar...")
                     return
                 elif respuesta == "si":
                     servicios_seleccionados = ["desayuno:2"]
                     print("✓ Desayuno añadido para ambas habitaciones")
+                    input("\nPresiona Enter para continuar...")
                 else:
                     print("Solo la suite tendrá desayuno.")
+                    input("\nPresiona Enter para continuar...")
         else:
-            print("Solo reservaste la suite.")
+            input("\nPresiona Enter para continuar...")
     #NO SUIT
     else:
 
@@ -384,6 +387,10 @@ def crear_reserva(habitaciones, servicios, reservas):
                         print("Ingresa un número (0, 1 o 2).")
     
     clear()
+    print("SERVICIOS DEL HOTEL")
+    print("\nDisponibilidad durante tu estancia:")
+    print(f"  • Masaje: {masajes_disponibles} disponible(s)")
+    print()
     print("="*40)
     print("SERVICIO DE MASAJES")
     print("="*40)
