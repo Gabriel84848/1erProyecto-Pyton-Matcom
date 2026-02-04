@@ -52,11 +52,11 @@
   "servicios": [
     {
       "nombre": "desayuno",
-      "capacidad_total": 4
+      "capacidad_total": 5
     },
     {
       "nombre": "masaje",
-      "capacidad_total": 2
+      "capacidad_total": 3
     }
   ],
   "reservas": []

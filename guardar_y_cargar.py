@@ -57,8 +57,8 @@ def cargar_datos():
         ]
         
         servicios = [
-            Servicio("desayuno", 4),
-            Servicio("masaje", 2)
+            Servicio("desayuno", 5),
+            Servicio("masaje", 3)
         ]
         
         return habitaciones, servicios, []   

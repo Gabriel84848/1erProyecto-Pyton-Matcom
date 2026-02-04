@@ -24,23 +24,81 @@ def Menu():
 
     return input("Selecciona una opción (1-7): ")
 
-def ver_habitaciones(habitaciones):
-    clear()
-    print("Catálogo de Habitaciones")
-
-    print("PISO 1:")
-    count=0
-    for hab in habitaciones:
-        if hab.piso == 1:
-            count +=1
-            print(f"{count}: {hab}")
-    
-    print("PISO 2:")
-    count=0
-    for hab in habitaciones:
-        if hab.piso == 2:
-            count +=1
-            print(f"{count}: {hab}")
+def ver_habitaciones(habitaciones, reservas):
+    while True:
+        clear()
+        print("Catalogo de Habitaciones")
+        
+        print("PISO 1:")
+        count=0
+        for hab in habitaciones:
+            if hab.piso == 1:
+                count +=1
+                print(f"{count}: {hab}")
+        
+        print("PISO 2:")
+        count=0
+        for hab in habitaciones:
+            if hab.piso == 2:
+                count +=1
+                print(f"{count}: {hab}")
+        
+        print("\n" + "="*50)
+        print("Para ver las reservas de una habitacion, escribe su ID (ej: H101)")
+        print("Escribe 'volver' para regresar al menu principal")
+        print("Presiona Enter sin escribir para volver al menu principal")
+        
+        seleccion = input(">> ").strip().upper()
+        
+        if seleccion == "":
+            return
+        
+        if seleccion.lower() == "volver":
+            return
+        
+        if "," in seleccion:
+            print("ERROR: Solo puedes consultar una habitacion a la vez.")
+            input("Presiona Enter para intentar de nuevo...")
+            continue  
+        
+        habitacion_existe = False
+        for hab in habitaciones:
+            if hab.id == seleccion:
+                habitacion_existe = True
+                break
+        
+        if not habitacion_existe:
+            print(f"ERROR: La habitacion {seleccion} no existe.")
+            input("Presiona Enter para intentar de nuevo...")
+            continue 
+        
+        reservas_habitacion = []
+        for reserva in reservas:
+            if seleccion in reserva.habitaciones_ids:
+                reservas_habitacion.append(reserva)
+        
+        clear()
+        print(f"RESERVAS PARA LA HABITACION: {seleccion}")
+        print("="*40)
+        
+        if len(reservas_habitacion) == 0:
+            print("No hay reservas para esta habitacion.")
+        else:
+            i = 1
+            for reserva in reservas_habitacion:
+                print(f"[{i}] Cliente: {reserva.cliente}")
+                print(f"    Fechas: {reserva.check_in.strftime('%d-%m-%Y')} al {reserva.check_out.strftime('%d-%m-%Y')}")
+                i += 1
+        
+        print("\n" + "="*50)
+        print("Que deseas hacer?")
+        print("1. Ver otra habitacion")
+        print("2. Volver al menu principal")
+        
+        opcion = input("Selecciona (1 o 2): ").strip()
+        
+        if opcion == "2":
+            return
 
 def ver_servicios(servicios):
     clear()
@@ -50,7 +108,7 @@ def ver_servicios(servicios):
     for servicio in servicios:
         print(f"{servicio.nombre.capitalize():<15} "
               f"{servicio.capacidad_total:<10}")
-
+        
 def ver_reservas(reservas):
     clear()
     print("RESERVAS EXISTENTES")
@@ -143,7 +201,7 @@ def main():
 
         if opcion == "1":
             clear()
-            ver_habitaciones(habitaciones)
+            ver_habitaciones(habitaciones, reservas)
             input("\nPresiona Enter para volver al menú")
         
         elif opcion == "2":
